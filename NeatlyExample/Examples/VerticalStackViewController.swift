@@ -34,10 +34,12 @@ final class VerticalStackViewController: UIViewController {
 
         container.neatly
             .add(views: subviews)
-            .with(format: .stack(
-                axis: .vertical,
-                spacing: 20,
-                insets: insets)
+            .with(format:
+                .stack(
+                    axis: .vertical,
+                    spacing: 20,
+                    insets: insets
+                )
         )
     }
 }

@@ -35,7 +35,11 @@ final class TableViewController: UIViewController {
 
         container.neatly
             .add(views: subviews)
-            .with(format: .table(columns: 3, horizontalSpacing: 10, verticalSpacing: 10, insets: insets)
+            .with(format: .table(
+                columns: 3,
+                horizontalSpacing: 10,
+                verticalSpacing: 10,
+                insets: insets)
         )
     }
 }
