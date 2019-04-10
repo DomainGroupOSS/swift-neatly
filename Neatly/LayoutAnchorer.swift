@@ -44,7 +44,33 @@ public extension Layout {
             right: NSLayoutXAxisAnchor?,
             insets: UIEdgeInsets = .zero) -> Layout.Bag<NSLayoutConstraint>
         {
-            let layout = AnchoredLayout(topAnchor: top, leftAnchor: left, bottomAnchor: bottom, rightAnchor: right, insets: insets)
+            let layout = AnchoredLayout(
+                topAnchor: top,
+                leftAnchor: left,
+                bottomAnchor: bottom,
+                rightAnchor: right,
+                insets: insets
+            )
+            return Anchorer.layout(sizedSubview: self.sizedSubview, with: layout)
+        }
+
+        /**
+         Prepare and install contraints representing the given `layout` of `views` in `superview`.
+
+         Fit `views` to the `available` space, respecting their `instrinsicContentSize`.
+         */
+        @discardableResult
+        public func anchored(
+            layoutGuide: UILayoutGuide,
+            insets: UIEdgeInsets = .zero) -> Layout.Bag<NSLayoutConstraint>
+        {
+            let layout = AnchoredLayout(
+                topAnchor: layoutGuide.topAnchor,
+                leftAnchor: layoutGuide.leftAnchor,
+                bottomAnchor: layoutGuide.bottomAnchor,
+                rightAnchor: layoutGuide.rightAnchor,
+                insets: insets
+            )
             return Anchorer.layout(sizedSubview: self.sizedSubview, with: layout)
         }
 

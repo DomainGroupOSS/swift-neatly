@@ -10,6 +10,7 @@ import UIKit
 
 public extension UIView {
 
+    @available(iOS, deprecated: 11.0, message: "Use safeAreaInsets")
     public var supportedSafeAreaInsets: UIEdgeInsets {
         if #available(iOS 11.0, *) {
             return self.safeAreaInsets
@@ -20,6 +21,7 @@ public extension UIView {
 
     private static var layoutGuideKey: UInt8 = 0
 
+    @available(iOS, deprecated: 11.0, message: "Use safeAreaLayoutGuide")
     public var compatibilitySafeAreaLayoutGuide: UILayoutGuide {
         if #available(iOS 11.0, *) {
             return self.safeAreaLayoutGuide
@@ -47,6 +49,7 @@ public extension UIViewController {
 
     private static var layoutGuideKey: UInt8 = 0
 
+    @available(iOS, deprecated: 11.0, message: "Use view.safeAreaLayoutGuide")
     public var compatibilitySafeAreaLayoutGuide: UILayoutGuide {
         if #available(iOS 11.0, *) {
             return self.view.safeAreaLayoutGuide
