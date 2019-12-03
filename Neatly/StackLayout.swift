@@ -18,11 +18,13 @@ struct StackLayout {
 extension StackLayout: LayoutFormatDescribing {
 
     public func prepare(sizedViews: [SizedView], in superview: UIView) -> [NSLayoutConstraint] {
-        switch axis {
+        switch self.axis {
         case .vertical:
             return StackLayout.prepareVertical(for: sizedViews, in: superview, spacing: spacing, insets: insets, fill: fill)
         case .horizontal:
             return StackLayout.prepareHorizontal(for: sizedViews, in: superview, spacing: spacing, insets: insets, fill: fill)
+        @unknown default:
+            fatalError("unexpected axis: \(self.axis)")
         }
     }
 

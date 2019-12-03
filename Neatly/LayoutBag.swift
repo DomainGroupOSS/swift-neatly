@@ -17,7 +17,7 @@ public extension Layout {
      - parameter flow: arranges views in rows with the given number of columns, with the given horizontal and vertical spacing.
      */
 
-    public struct Bag<Constraint: ConstraintDescribing>: ConstraintContaining {
+    struct Bag<Constraint: ConstraintDescribing>: ConstraintContaining {
 
         public let constraints: [Constraint]
 
@@ -26,7 +26,7 @@ public extension Layout {
         }
     }
 
-    public struct SizeBag<Constraint: ConstraintDescribing>: ConstraintContaining {
+    struct SizeBag<Constraint: ConstraintDescribing>: ConstraintContaining {
 
         private let width: Constraint
         private let height: Constraint
@@ -51,7 +51,7 @@ public extension Layout {
         }
     }
 
-    public class MutableBag<Constraint: ConstraintDescribing>: ConstraintContaining {
+    class MutableBag<Constraint: ConstraintDescribing>: ConstraintContaining {
 
         public var constraints: [Constraint] = []
 
