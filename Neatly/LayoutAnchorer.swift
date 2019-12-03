@@ -10,7 +10,7 @@ import UIKit
 
 public extension Layout {
 
-    public struct Anchorer {
+    struct Anchorer {
 
         private let edges: Layout.Edges
         private let sizedSubview: SizedView

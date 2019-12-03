@@ -33,15 +33,15 @@ public protocol ConstraintContaining {
 
 public extension ConstraintContaining {
     
-    public func activate() {
+    func activate() {
         self.constraints.forEach { $0.activate() }
     }
     
-    public func deactivate() {
+    func deactivate() {
         self.constraints.forEach { $0.deactivate() }
     }
     
-    public func update(active: Bool) {
+    func update(active: Bool) {
         if active {
             self.activate()
         } else {

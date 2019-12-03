@@ -20,7 +20,7 @@ public protocol LayoutFormatDescribing {
 
 public extension Layout {
 
-    public enum Format {
+    enum Format {
 
         case stack(axis: NSLayoutConstraint.Axis, spacing: CGFloat, insets: UIEdgeInsets)
         case fill(axis: NSLayoutConstraint.Axis, spacing: CGFloat, insets: UIEdgeInsets)

@@ -10,7 +10,7 @@ import UIKit
 
 public extension Layout {
 
-    public struct Constructor {
+    struct Constructor {
 
         private let superview: UIView
         private let sizedSubviews: [SizedView]
