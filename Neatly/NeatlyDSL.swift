@@ -83,10 +83,10 @@ public extension UIViewController {
 
     var neatly: NeatlyDSL {
         return NeatlyDSL(view: self.view, edges: { Layout.Edges(
-            topAnchor: self.compatibilitySafeAreaLayoutGuide.topAnchor,
-            leftAnchor: self.compatibilitySafeAreaLayoutGuide.leftAnchor,
-            bottomAnchor: self.compatibilitySafeAreaLayoutGuide.bottomAnchor,
-            rightAnchor: self.compatibilitySafeAreaLayoutGuide.rightAnchor
+            topAnchor: self.view.safeAreaLayoutGuide.topAnchor,
+            leftAnchor: self.view.safeAreaLayoutGuide.leftAnchor,
+            bottomAnchor: self.view.safeAreaLayoutGuide.bottomAnchor,
+            rightAnchor: self.view.safeAreaLayoutGuide.rightAnchor
         )})
     }
 }
