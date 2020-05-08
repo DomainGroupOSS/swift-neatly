@@ -29,9 +29,9 @@ public extension Layout {
         var formatDescribing: LayoutFormatDescribing {
             switch self {
             case let .stack(axis, spacing, insets):
-                return StackLayout(axis: axis, lowPrioritySpacing: true, spacing: spacing, lowPriorityPadding: true, insets: insets, fill: false)
+                return StackLayout(axis: axis, lowPrioritySpacing: false, spacing: spacing, lowPriorityPadding: true, insets: insets, fill: false)
             case let .fill(axis, spacing, insets):
-                return StackLayout(axis: axis, lowPrioritySpacing: true, spacing: spacing, lowPriorityPadding: true, insets: insets, fill: true)
+                return StackLayout(axis: axis, lowPrioritySpacing: false, spacing: spacing, lowPriorityPadding: true, insets: insets, fill: true)
             case let .table(columns, horizontalSpacing, verticalSpacing, insets):
                 return TableLayout(columns: columns, spacing: (horizontalSpacing, verticalSpacing), insets: insets)
             }
