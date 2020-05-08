@@ -30,7 +30,7 @@ public extension Layout {
             switch self {
             case let .stack(axis, spacing, insets, lowPriorityPadding):
                 return StackLayout(axis: axis, lowPrioritySpacing: false, spacing: spacing, lowPriorityPadding: lowPriorityPadding, insets: insets, fill: false)
-            case let .fill(axis, spacing, insets, lowPriorityPadding):
+            case let .fill(axis, spacing, insets):
                 return StackLayout(axis: axis, lowPrioritySpacing: false, spacing: spacing, lowPriorityPadding: false, insets: insets, fill: true)
             case let .table(columns, horizontalSpacing, verticalSpacing, insets):
                 return TableLayout(columns: columns, spacing: (horizontalSpacing, verticalSpacing), insets: insets)
