@@ -74,10 +74,12 @@ extension StackLayout: LayoutFormatDescribing {
     static func prepare<MajorAxis, MinorAxis>(
         for sizedViews: [SizedView],
         in superview: UIView,
+        lowPrioritySpacing: Bool = true,
         spacing: CGFloat,
         fill: Bool,
-        minorPadding: (CGFloat, CGFloat),
-        majorPadding: (CGFloat, CGFloat),
+        lowPriorityPadding: Bool = true,
+        minorPadding: (top: CGFloat, bottom: CGFloat),
+        majorPadding: (left: CGFloat, right: CGFloat),
         minorEdgeMinimum: AxisAnchorProducer<MinorAxis>,
         minorEdgeMaximum: AxisAnchorProducer<MinorAxis>,
         majorEdgeMinimum: AxisAnchorProducer<MajorAxis>,
@@ -95,33 +97,49 @@ extension StackLayout: LayoutFormatDescribing {
         let minEdge = majorEdgeMinimum(firstView.view).constraint(equalTo: majorEdgeMinimum(superview), constant: majorPadding.0)
 
         let viewConstraints = sizedViews.sliding().flatMap { view, nextView -> [NSLayoutConstraint] in
-            let majorConstraints = self.prepareMajor(forView: view, in: superview, majorPadding: majorPadding,
+            let majorConstraints = self.prepareMajor(forView: view, in: superview, lowPriorityPadding: lowPriorityPadding, majorPadding: majorPadding,
                                                      majorEdgeMinimum: majorEdgeMinimum, majorEdgeMaximum: majorEdgeMaximum,
                                                      majorDimension: majorDimension, majorDimensionValue: majorDimensionValue)
 
-            let minorConstraints = self.prepareMinor(forView: view, in: superview, minorPadding: minorPadding,
+            let minorConstraints = self.prepareMinor(forView: view, in: superview, lowPriorityPadding: lowPriorityPadding, minorPadding: minorPadding,
                                                      minorEdgeMinimum: minorEdgeMinimum, minorEdgeMaximum: minorEdgeMaximum,
                                                      minorDimension: minorDimension, minorDimensionValue: minorDimensionValue,
                                                      minorCenter: minorCenter)
-
-            let spacing = [majorEdgeMinimum(nextView.view).constraint(equalTo: majorEdgeMaximum(view.view), constant: spacing)]
+            let spacingConstraint = majorEdgeMinimum(nextView.view).constraint(equalTo: majorEdgeMaximum(view.view), constant: spacing)
+            let spacing = lowPriorityPadding ? [spacingConstraint.with(priority: .defaultLow)] : [spacingConstraint]
             let width = fill ? [majorDimension(nextView.view).constraint(equalTo: majorDimension(view.view), multiplier: 1).with(priority: 500)] : []
 
             return majorConstraints + minorConstraints + spacing + width
         }
 
         let lastViewMajor = self.prepareMajor(
-                forView: lastView, in: superview, majorPadding: majorPadding,
-                majorEdgeMinimum: majorEdgeMinimum, majorEdgeMaximum: majorEdgeMaximum,
-                majorDimension: majorDimension, majorDimensionValue: majorDimensionValue)
+            forView: lastView,
+            in: superview,
+            lowPriorityPadding: lowPriorityPadding,
+            majorPadding: majorPadding,
+            majorEdgeMinimum: majorEdgeMinimum,
+            majorEdgeMaximum: majorEdgeMaximum,
+            majorDimension: majorDimension,
+            majorDimensionValue: majorDimensionValue)
 
         let lastViewMinor = self.prepareMinor(
-                forView: lastView, in: superview, minorPadding: minorPadding,
-                minorEdgeMinimum: minorEdgeMinimum, minorEdgeMaximum: minorEdgeMaximum,
-                minorDimension: minorDimension, minorDimensionValue: minorDimensionValue,
+                forView: lastView,
+                in: superview,
+                lowPriorityPadding: lowPriorityPadding,
+                minorPadding: minorPadding,
+                minorEdgeMinimum: minorEdgeMinimum,
+                minorEdgeMaximum: minorEdgeMaximum,
+                minorDimension: minorDimension,
+                minorDimensionValue: minorDimensionValue,
                 minorCenter: minorCenter)
 
-        let lastViewRight = fill ? [majorEdgeMaximum(lastView.view).constraint(equalTo: majorEdgeMaximum(superview), constant: -majorPadding.1)] : []
+        let lastViewRight: [NSLayoutConstraint]
+        if fill {
+            let lastViewRightConstraint = majorEdgeMaximum(lastView.view).constraint(equalTo: majorEdgeMaximum(superview), constant: -majorPadding.right)
+            lastViewRight = lowPriorityPadding ? [lastViewRightConstraint.with(priority: .defaultLow)] : [lastViewRightConstraint]
+        } else {
+            lastViewRight = []
+        }
 
         let lastViewConstraints = lastViewMajor + lastViewMinor + lastViewRight
 
@@ -131,13 +149,14 @@ extension StackLayout: LayoutFormatDescribing {
     private static func prepareMajor<MajorAxis>(
         forView sizedView: SizedView,
         in superview: UIView,
-        majorPadding: (CGFloat, CGFloat),
+        lowPriorityPadding: Bool = true,
+        majorPadding: (left: CGFloat, right: CGFloat),
         majorEdgeMinimum: AxisAnchorProducer<MajorAxis>,
         majorEdgeMaximum: AxisAnchorProducer<MajorAxis>,
         majorDimension: DimensionAnchorProducer,
         majorDimensionValue: ValueProducer) -> [NSLayoutConstraint]
     {
-        let maxEdge = majorEdgeMaximum(sizedView.view).constraint(lessThanOrEqualTo: majorEdgeMaximum(superview), constant: -majorPadding.1)
+        let maxEdge = majorEdgeMaximum(sizedView.view).constraint(lessThanOrEqualTo: majorEdgeMaximum(superview), constant: -majorPadding.right)
 
         let majorDimensionConstraint = majorDimensionValue(sizedView).map { major in
             majorDimension(sizedView.view).constraint(equalToConstant: major)
@@ -149,7 +168,8 @@ extension StackLayout: LayoutFormatDescribing {
     private static func prepareMinor<MinorAxis>(
         forView sizedView: SizedView,
         in superview: UIView,
-        minorPadding: (CGFloat, CGFloat),
+        lowPriorityPadding: Bool = true,
+        minorPadding: (top: CGFloat, bottom: CGFloat),
         minorEdgeMinimum: AxisAnchorProducer<MinorAxis>,
         minorEdgeMaximum: AxisAnchorProducer<MinorAxis>,
         minorDimension: DimensionAnchorProducer,
@@ -157,16 +177,19 @@ extension StackLayout: LayoutFormatDescribing {
         minorCenter: AxisAnchorProducer<MinorAxis>) -> [NSLayoutConstraint]
     {
         if let fixedMinorDimension = minorDimensionValue(sizedView) {
+            let minorConstraintMix = minorEdgeMinimum(sizedView.view).constraint(greaterThanOrEqualTo: minorEdgeMinimum(superview), constant: minorPadding.top)
+            let minorConstraintMax = minorEdgeMaximum(sizedView.view).constraint(lessThanOrEqualTo: minorEdgeMaximum(superview), constant: -minorPadding.bottom)
+
             return [
-                minorEdgeMinimum(sizedView.view).constraint(greaterThanOrEqualTo: minorEdgeMinimum(superview), constant: minorPadding.0),
-                minorEdgeMaximum(sizedView.view).constraint(lessThanOrEqualTo: minorEdgeMaximum(superview), constant: -minorPadding.1),
+                lowPriorityPadding ? minorConstraintMix.with(priority: .defaultLow) : minorConstraintMix,
+                lowPriorityPadding ? minorConstraintMax.with(priority: .defaultLow) : minorConstraintMax,
                 minorDimension(sizedView.view).constraint(equalToConstant: fixedMinorDimension),
                 minorCenter(sizedView.view).constraint(equalTo: minorCenter(superview))
             ]
         } else {
             return [
-                minorEdgeMinimum(sizedView.view).constraint(equalTo: minorEdgeMinimum(superview), constant: minorPadding.0).with(priority: .for(.stackItemMinorEdgeAnchors)),
-                minorEdgeMaximum(sizedView.view).constraint(equalTo: minorEdgeMaximum(superview), constant: -minorPadding.1).with(priority: .for(.stackItemMinorEdgeAnchors))
+                minorEdgeMinimum(sizedView.view).constraint(equalTo: minorEdgeMinimum(superview), constant: minorPadding.top).with(priority: .for(.stackItemMinorEdgeAnchors)),
+                minorEdgeMaximum(sizedView.view).constraint(equalTo: minorEdgeMaximum(superview), constant: -minorPadding.bottom).with(priority: .for(.stackItemMinorEdgeAnchors))
             ]
         }
     }
