@@ -10,7 +10,9 @@ import UIKit
 
 struct StackLayout {
     let axis: NSLayoutConstraint.Axis
+    let lowPrioritySpacing: Bool
     let spacing: CGFloat
+    let lowPriorityPadding: Bool
     let insets: UIEdgeInsets
     let fill: Bool
 }
@@ -20,20 +22,38 @@ extension StackLayout: LayoutFormatDescribing {
     public func prepare(sizedViews: [SizedView], in superview: UIView) -> [NSLayoutConstraint] {
         switch self.axis {
         case .vertical:
-            return StackLayout.prepareVertical(for: sizedViews, in: superview, spacing: spacing, insets: insets, fill: fill)
+            return StackLayout.prepareVertical(for: sizedViews, in: superview,
+                                               lowPrioritySpacing: lowPrioritySpacing,
+                                               spacing: spacing,
+                                               lowPriorityPadding: lowPriorityPadding,
+                                               insets: insets,
+                                               fill: fill)
         case .horizontal:
-            return StackLayout.prepareHorizontal(for: sizedViews, in: superview, spacing: spacing, insets: insets, fill: fill)
+            return StackLayout.prepareHorizontal(for: sizedViews, in: superview,
+                                                 lowPrioritySpacing: lowPrioritySpacing,
+                                                 spacing: spacing,
+                                                 lowPriorityPadding: lowPriorityPadding,
+                                                 insets: insets,
+                                                 fill: fill)
         @unknown default:
             fatalError("unexpected axis: \(self.axis)")
         }
     }
 
-    static func prepareVertical(for sizedViews: [SizedView], in superview: UIView, spacing: CGFloat, insets: UIEdgeInsets, fill: Bool) -> [NSLayoutConstraint] {
+    static func prepareVertical(for sizedViews: [SizedView],
+                                in superview: UIView,
+                                lowPrioritySpacing: Bool,
+                                spacing: CGFloat,
+                                lowPriorityPadding: Bool,
+                                insets: UIEdgeInsets,
+                                fill: Bool) -> [NSLayoutConstraint] {
         return prepare(
             for: sizedViews,
             in: superview,
+            lowPrioritySpacing: lowPrioritySpacing,
             spacing: spacing,
             fill: fill,
+            lowPriorityPadding: lowPriorityPadding,
             minorPadding: (insets.left, insets.right),
             majorPadding: (insets.top, insets.bottom),
             minorEdgeMinimum: { $0.leftAnchor },
@@ -47,12 +67,20 @@ extension StackLayout: LayoutFormatDescribing {
             minorCenter: { $0.centerXAnchor })
     }
 
-    static func prepareHorizontal(for sizedViews: [SizedView], in superview: UIView, spacing: CGFloat, insets: UIEdgeInsets, fill: Bool) -> [NSLayoutConstraint] {
+    static func prepareHorizontal(for sizedViews: [SizedView],
+                                  in superview: UIView,
+                                  lowPrioritySpacing: Bool,
+                                  spacing: CGFloat,
+                                  lowPriorityPadding: Bool,
+                                  insets: UIEdgeInsets,
+                                  fill: Bool) -> [NSLayoutConstraint] {
         return prepare(
             for: sizedViews,
             in: superview,
+            lowPrioritySpacing: lowPrioritySpacing,
             spacing: spacing,
             fill: fill,
+            lowPriorityPadding: lowPriorityPadding,
             minorPadding: (insets.top, insets.bottom),
             majorPadding: (insets.left, insets.right),
             minorEdgeMinimum: { $0.topAnchor },
@@ -74,10 +102,10 @@ extension StackLayout: LayoutFormatDescribing {
     static func prepare<MajorAxis, MinorAxis>(
         for sizedViews: [SizedView],
         in superview: UIView,
-        lowPrioritySpacing: Bool = true,
+        lowPrioritySpacing: Bool,
         spacing: CGFloat,
         fill: Bool,
-        lowPriorityPadding: Bool = true,
+        lowPriorityPadding: Bool,
         minorPadding: (top: CGFloat, bottom: CGFloat),
         majorPadding: (left: CGFloat, right: CGFloat),
         minorEdgeMinimum: AxisAnchorProducer<MinorAxis>,
@@ -149,7 +177,7 @@ extension StackLayout: LayoutFormatDescribing {
     private static func prepareMajor<MajorAxis>(
         forView sizedView: SizedView,
         in superview: UIView,
-        lowPriorityPadding: Bool = true,
+        lowPriorityPadding: Bool,
         majorPadding: (left: CGFloat, right: CGFloat),
         majorEdgeMinimum: AxisAnchorProducer<MajorAxis>,
         majorEdgeMaximum: AxisAnchorProducer<MajorAxis>,
@@ -168,7 +196,7 @@ extension StackLayout: LayoutFormatDescribing {
     private static func prepareMinor<MinorAxis>(
         forView sizedView: SizedView,
         in superview: UIView,
-        lowPriorityPadding: Bool = true,
+        lowPriorityPadding: Bool,
         minorPadding: (top: CGFloat, bottom: CGFloat),
         minorEdgeMinimum: AxisAnchorProducer<MinorAxis>,
         minorEdgeMaximum: AxisAnchorProducer<MinorAxis>,
