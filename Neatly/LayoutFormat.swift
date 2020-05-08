@@ -21,15 +21,17 @@ public protocol LayoutFormatDescribing {
 public extension Layout {
 
     enum Format {
-
-        case stack(axis: NSLayoutConstraint.Axis, spacing: CGFloat, insets: UIEdgeInsets, lowPriorityPadding: Bool)
+        case stackPadding(axis: NSLayoutConstraint.Axis, spacing: CGFloat, insets: UIEdgeInsets)
+        case stack(axis: NSLayoutConstraint.Axis, spacing: CGFloat, insets: UIEdgeInsets)
         case fill(axis: NSLayoutConstraint.Axis, spacing: CGFloat, insets: UIEdgeInsets)
         case table(columns: Int, horizontalSpacing: CGFloat, verticalSpacing: CGFloat, insets: UIEdgeInsets)
 
         var formatDescribing: LayoutFormatDescribing {
             switch self {
-            case let .stack(axis, spacing, insets, lowPriorityPadding):
-                return StackLayout(axis: axis, lowPrioritySpacing: false, spacing: spacing, lowPriorityPadding: lowPriorityPadding, insets: insets, fill: false)
+            case let .stackPadding(axis, spacing, insets):
+                return StackLayout(axis: axis, lowPrioritySpacing: false, spacing: spacing, lowPriorityPadding: true, insets: insets, fill: false)
+            case let .stack(axis, spacing, insets):
+                return StackLayout(axis: axis, lowPrioritySpacing: false, spacing: spacing, lowPriorityPadding: false, insets: insets, fill: false)
             case let .fill(axis, spacing, insets):
                 return StackLayout(axis: axis, lowPrioritySpacing: false, spacing: spacing, lowPriorityPadding: false, insets: insets, fill: true)
             case let .table(columns, horizontalSpacing, verticalSpacing, insets):
