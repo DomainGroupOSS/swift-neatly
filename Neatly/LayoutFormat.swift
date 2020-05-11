@@ -21,14 +21,14 @@ public protocol LayoutFormatDescribing {
 public extension Layout {
 
     enum Format {
-        case stackPadding(axis: NSLayoutConstraint.Axis, spacing: CGFloat, insets: UIEdgeInsets)
+        case stackLowPriorityPadding(axis: NSLayoutConstraint.Axis, spacing: CGFloat, insets: UIEdgeInsets)
         case stack(axis: NSLayoutConstraint.Axis, spacing: CGFloat, insets: UIEdgeInsets)
         case fill(axis: NSLayoutConstraint.Axis, spacing: CGFloat, insets: UIEdgeInsets)
         case table(columns: Int, horizontalSpacing: CGFloat, verticalSpacing: CGFloat, insets: UIEdgeInsets)
 
         var formatDescribing: LayoutFormatDescribing {
             switch self {
-            case let .stackPadding(axis, spacing, insets):
+            case let .stackLowPriorityPadding(axis, spacing, insets):
                 return StackLayout(axis: axis, lowPrioritySpacing: false, spacing: spacing, lowPriorityPadding: true, insets: insets, fill: false)
             case let .stack(axis, spacing, insets):
                 return StackLayout(axis: axis, lowPrioritySpacing: false, spacing: spacing, lowPriorityPadding: false, insets: insets, fill: false)
