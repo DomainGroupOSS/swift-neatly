@@ -1,12 +1,13 @@
 //
-//  ArrayValueInitializer.swift
-//  Domain
+//  TestExtensions.swift
+//  Neatly
 //
-//  Created by Sam.Warner on 29/6/17.
-//  Copyright © 2017 Fairfax Digital. All rights reserved.
+//  Created by Aiden Benton on 7/02/2017.
+//  Copyright © 2017 Domain. All rights reserved.
 //
 
-import Foundation
+import Neatly
+import UIKit
 
 extension Array {
 
@@ -20,5 +21,17 @@ extension Array {
 
     init(count: Int, valueInitializer: () -> Element) {
         self.init(Array.array(count: count, valueInitializer: valueInitializer, incorporatingArray: []))
+    }
+}
+
+extension UIEdgeInsets {
+
+    init(_ inset: CGFloat, on edges: UIRectEdge = .all) {
+        self.init(
+            top: edges.contains(.top) ? inset : 0,
+            left: edges.contains(.left) ? inset : 0,
+            bottom: edges.contains(.bottom) ? inset : 0,
+            right: edges.contains(.right) ? inset : 0
+        )
     }
 }
