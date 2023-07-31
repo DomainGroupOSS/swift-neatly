@@ -208,7 +208,7 @@ class StackLayoutTests: QuickSpec {
                 it("should add all constraints to the superview") {
                     let subviewConstraints = subviews.flatMap { $0.constraints }
                     let superviewConstraints = superview.constraints
-                    expect(subviewConstraints).to(allPass({ !superviewConstraints.contains($0!) }))
+                    expect(subviewConstraints).to(allPass({ !superviewConstraints.contains($0) }))
                 }
             }
             
@@ -520,7 +520,7 @@ class StackLayoutTests: QuickSpec {
                 it("should add all constraints to the superview") {
                     let subviewConstraints = subviews.flatMap { $0.constraints }
                     let superviewConstraints = superview.constraints
-                    expect(subviewConstraints).to(allPass({ !superviewConstraints.contains($0!) }))
+                    expect(subviewConstraints).to(allPass({ !superviewConstraints.contains($0) }))
                 }
             }
 

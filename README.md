@@ -10,25 +10,11 @@ Neatly provides a simple and elegate DSL for laying multiple views out in a regu
 
 ## How to get it 
 
-### Carthage
-
-```
-git "DomainGroupOSS/swift-neatly" "0.1.1"    
-```
-
-### Cocoapods
-
-```
-pod "SwiftNeatly", "0.1.1" 
-```
-
 ### Swift Package Manager
 
-`//TODO`
+`.package(url:  "https://github.com/DomainGroupOSS/swift-neatly", from: "0.4.0")`
 
 ## Usage
-
-See the examples below, or check out the [example code](https://github.com/DomainGroupOSS/swift-neatly/tree/master/NeatlyExample/Examples).
 
 ### Stack
 
